@@ -17,8 +17,10 @@ exports.createProduct = catchAsyncError(async (req, res, next) => {
 });
 
 //Get all products
-exports.getAllProducts = catchAsyncError(async (req, res) => {
-  const resultPerPage = 5;
+exports.getAllProducts = catchAsyncError(async (req, res, next) => {
+
+  return next(new ErrorHander("This is my temp error", 500))
+  const resultPerPage = 8;
   const productCount = await Product.countDocuments();
 
   const apiFeature = new ApiFeatures(Product.find(), req.query)
@@ -30,6 +32,7 @@ exports.getAllProducts = catchAsyncError(async (req, res) => {
   res.status(200).json({
     success: true,
     products,
+    productCount
   });
 });
 
@@ -110,7 +113,7 @@ exports.createProductReview = catchAsyncError(async(req,res,next)=>{
 
   }else{
     product.reviews.push(review)
-    product.numOfReviews = product.reviews.length
+    product.numberOfReviews = product.reviews.length
   }
 
   // Average of total revies
@@ -159,11 +162,11 @@ exports.deleteReview = catchAsyncError(async(req,res,next)=>{
     avg += rev.rating;
   });
   const ratings = avg/reviews.length;
-  const numOfReviews = reviews.length;
+  const numberOfReviews = reviews.length;
   await Product.findByIdAndUpdate(req.query.productId, {
     reviews,
     ratings,
-    numOfReviews,
+    numberOfReviews,
   },{
     new : true,
     runValidators: true,
