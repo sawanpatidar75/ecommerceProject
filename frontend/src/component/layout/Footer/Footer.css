@@ -16,10 +16,12 @@ footer {
 
 .leftFooter>h4 {
     font-family: "Frankline Gothic Medium", "Arial Narrow", Arial, sans-serif;
+    font-size: 1vmax;
 }
 
 .leftFooter>p {
     text-align: center;
+    font-size: 1.2vmax;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Univode', Geneva, Verdana, sans-serif;
 }
 
@@ -64,6 +66,7 @@ footer {
     color: white;
     transition: all 0.5s;
     margin: 0.5vmax;
+    
 }
 
 .rightFooter>a:hover {

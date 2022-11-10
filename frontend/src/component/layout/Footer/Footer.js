@@ -21,9 +21,9 @@ function Footer() {
         </div>
         <div className='rightFooter'>
             <h4>Follow Us</h4>
-            <a href=''>Instagram</a>
-            <a href=''>Facebook</a>
-            <a href=''>Youtube</a>
+            <a href='https://www.instagram.com/' target={'blank'}>Instagram</a>
+            <a href='https://facebook.com' target={'blank'}>Facebook</a>
+            <a href='https://youtube.com' target={'blank'}>Youtube</a>
 
         </div>
 
