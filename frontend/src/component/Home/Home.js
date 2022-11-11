@@ -23,14 +23,14 @@ const Home = () => {
   const { loading, error, products, productsCount } = useSelector(
     (state) => state.products
   );
-  console.log("products--------", products);
 
+  
   useEffect(() => {
     if(error){
       return alert.error(error)
     }
     dispatch(getProduct());
-  }, [dispatch, error]);
+  }, [dispatch, error, alert]);
 
   return (
     <Fragment>
