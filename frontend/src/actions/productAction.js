@@ -30,6 +30,7 @@ export const getProduct = () => async (dispatch) => {
 
 
 export const getProductDetails = (id) => async (dispatch) => {
+  console.log("getProductDetails=",id);
     try {
       dispatch({
         type: PRODUCT_DETAILS_REQUEST,
