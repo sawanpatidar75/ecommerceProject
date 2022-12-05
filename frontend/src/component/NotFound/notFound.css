@@ -1,0 +1,25 @@
+.notFoundContainer {
+    height: 100vmin;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+
+}
+.notFoundHeading {
+    font: 200 5vmax "Roboto";
+    padding: 2vmax;
+    background-color: aliceblue;
+    border: 1px solid black;
+
+}
+.notFoundLink {
+    font: 500 2vmax cursive;
+    background-color: rgb(233, 73, 25);
+    margin: 1vmax;
+    border-radius: 10%;
+    border: 1px solid black;
+    
+    
+}

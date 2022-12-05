@@ -2,6 +2,9 @@
     margin: 0;
     scroll-behavior: smooth;
 }
+body {
+  cursor: url("./images/cursor-png-1142.png"), auto;
+}
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -14,8 +17,8 @@ input[type=number] {
 }
 
 .greenColor {
-    color: green;
+    color: green !important;
 }
 .redColor {
-    color: red;
+    color: red !important;
 }

@@ -4,10 +4,18 @@ const User = require("../models/userModel");
 const sendToken = require("../utils/jwtToken");
 const sendEmail = require("../utils/sendEmail");
 const crypto = require("crypto");
+const cloudinary = require("cloudinary")
 
 //Register User.
 
 exports.registerUser = catchAsyncError(async (req, res, next) => {
+
+  const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+    folder: "avatars",
+    width: 150,
+    crop: 'scale'
+  })
+
   const { name, email, password } = req.body;
 
   const user = await User.create({
@@ -15,8 +23,8 @@ exports.registerUser = catchAsyncError(async (req, res, next) => {
     email,
     password,
     avatar: {
-      public_id: "This is a sample id",
-      url: "profilepicUrl",
+      public_id: myCloud.public_id,
+      url: myCloud.secure_url,
     },
   });
 
@@ -73,10 +81,8 @@ exports.forgotPassword = catchAsyncError(async (req, res, next) => {
 
   await user.save({ validateBeforeSave: false });
 
-  const resetPasswordUrl = `${req.protocol}://${req.get(
-    "host"
-  )}/api/v1/password/reset/${resetToken}`;
-
+  const resetPasswordUrl = `${req.protocol}://${req.get('host')}/password/reset/${resetToken}`;
+                        //req.protocol}://${req.get("host")
   const message = `Your password reset token is :- \n\n ${resetPasswordUrl} \n\n If you not have requested this email then, please ignore it`;
 
   try {
@@ -165,15 +171,30 @@ exports.updatePassword = catchAsyncError(async (req, res, next) => {
 });
 
 // Update user profile.
-
-//Update User Password.
 exports.updateProfile = catchAsyncError(async (req, res, next) => {
   const newUserData = {
     name: req.body.name,
     email: req.body.email,
   };
 
-  //We will add cloudinary later
+
+  if (req.body.avatar !== "") {
+    const user = await User.findById(req.user.id);
+    const imageId = user.avatar.public_id;
+    await cloudinary.v2.uploader.destroy(imageId);
+
+    const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+      folder: "avatars",
+      width: 150,
+      crop: 'scale'
+    })
+
+    newUserData.avatar = {
+      public_id: myCloud.public_id,
+      url: myCloud.secure_url,
+    }
+    
+  }
 
   const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
     new: true,
@@ -188,7 +209,6 @@ exports.updateProfile = catchAsyncError(async (req, res, next) => {
 
 
 //Get all Users (Admin).
-
 exports.getAllUsers = catchAsyncError(async (req,res,next)=>{
   const users = await User.find();
 
@@ -199,7 +219,6 @@ exports.getAllUsers = catchAsyncError(async (req,res,next)=>{
 })
 
 //Get Single Users (Admin).
-
 exports.getSingleUser = catchAsyncError(async (req,res,next)=>{
   const user = await User.findById(req.params.id);
 
@@ -222,7 +241,7 @@ exports.updateUserRole = catchAsyncError(async (req, res, next) => {
     role: req.body.role,
   };
 
-  const user = await User.findByIdAndUpdate(req.params.id, newUserData, {
+  await User.findByIdAndUpdate(req.params.id, newUserData, {
     new: true,
     runValidators: true,
     useFindAndModify: false,
@@ -239,12 +258,14 @@ exports.deleteUser = catchAsyncError(async (req, res, next) => {
   
   const user = await User.findById(req.params.id);
 
-  //We will remove cloudinary later
-
   if(!user){
     return next(new ErrorHander(`User does not exist with Id; ${req.params.id}`));
 
   }
+
+  const imageId = user.avatar.public_id;
+    await cloudinary.v2.uploader.destroy(imageId);
+
 
   await user.remove();
 
