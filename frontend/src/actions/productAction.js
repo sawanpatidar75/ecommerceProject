@@ -35,7 +35,7 @@ import {
 export const getProduct = (
   keyword = "",
   currentPage = 1,
-  price = [0, 25000],
+  price = [0, 500000],
   category,
   ratings = 0
 ) => async (dispatch) => {
